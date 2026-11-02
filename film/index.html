@@ -1,0 +1,353 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Oldham Street Lofts</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Familjen+Grotesk:wght@400;500;600&display=swap">
+<style>
+/* Layout: one 4:3 film frame (1440×1080 stage, scaled to fit), controls beneath. A single dark cinema look by design. */
+:root{
+  color-scheme:dark;
+  --page:#0B0B0A; --ground:#121110; --paper:#F3EFE9; --muted:rgba(243,239,233,.7); --brass:#C9A86A; --sage:#8CC08C;
+  --serif:"EB Garamond",Garamond,Georgia,serif;
+  --sans:"Familjen Grotesk","Helvetica Neue",Arial,sans-serif;
+}
+html,body{height:100%}
+body{margin:0;background:var(--page);color:var(--paper);font:400 14px/1.5 var(--sans);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));-webkit-font-smoothing:antialiased}
+.app{min-height:100%;display:grid;place-items:center;padding-block:16px}
+.player{width:min(100%,calc((100dvh - 104px) * 4 / 3),1280px);display:grid;gap:10px}
+#frame{position:relative;width:100%;aspect-ratio:4/3;max-width:100%;overflow:hidden;background:#000}
+#stage{position:absolute;left:0;top:0;width:1440px;height:1080px;transform-origin:0 0;overflow:hidden;background:var(--ground);contain:strict}
+
+.scene{position:absolute;inset:0;visibility:hidden;background:var(--ground)}
+.scene.black{background:#000}
+.shot{position:absolute;inset:0;overflow:hidden;visibility:hidden}
+.shot.ground{background:var(--ground)}
+.media{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;will-change:transform;display:block;max-width:none}
+.media.free{inset:auto;left:0;top:0;transform-origin:0 0}
+.grade{filter:saturate(.84) brightness(.92) contrast(1.04)}
+.paper{box-shadow:0 30px 90px rgba(0,0,0,.6);filter:sepia(.22) brightness(.86) contrast(1.05)}
+.bgstill .media{opacity:.2;filter:blur(3px) saturate(.7)}
+[data-in]{opacity:0}
+.scrim-l{position:absolute;inset:0;background:linear-gradient(90deg,rgba(10,9,8,.66) 0%,rgba(10,9,8,.3) 36%,rgba(10,9,8,0) 58%)}
+.scrim-bl{position:absolute;inset:0;background:radial-gradient(ellipse 78% 44% at 18% 90%,rgba(14,13,12,.78),rgba(14,13,12,0) 74%)}
+.scrim-tl{position:absolute;inset:0;background:radial-gradient(ellipse 78% 40% at 20% 14%,rgba(14,13,12,.62),rgba(14,13,12,0) 74%)}
+
+/* captions, in the build update's style */
+.cap{position:absolute;left:104px;top:836px;font:italic 400 48px/1.16 var(--serif);color:rgba(244,240,234,.96);text-shadow:0 1px 3px rgba(0,0,0,.25),0 1px 26px rgba(0,0,0,.55);letter-spacing:-.003em}
+.cap.hi{top:150px}
+.cap.mid{top:468px}
+.cap .l{display:block}
+
+.ttl{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding-bottom:20px}
+.ttl .a{display:block;width:352px;height:127px}
+.ttl .b{font:italic 400 40px/1.2 var(--serif);margin-top:34px;color:rgba(243,239,233,.92)}
+
+.eyebrow{font:500 19px/1 var(--sans);letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+.nums{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding-bottom:40px}
+.big{font:400 200px/.86 var(--serif);letter-spacing:-.02em;font-variant-numeric:lining-nums;margin-top:34px}
+.row3{display:grid;grid-template-columns:repeat(3,300px);gap:56px;margin-top:80px;text-align:left}
+.fig{display:grid;gap:12px;align-content:start}
+.hair{height:1px;background:rgba(243,239,233,.32);transform-origin:0 50%;margin-bottom:14px}
+.fig .v{font:400 84px/.92 var(--serif);font-variant-numeric:lining-nums;letter-spacing:-.01em}
+.fig .k{font:400 21px/1.35 var(--sans);color:var(--muted)}
+.foot{position:absolute;left:0;right:0;bottom:84px;text-align:center;font:400 18px/1.4 var(--sans);color:rgba(243,239,233,.5)}
+
+.close{position:absolute;inset:0;padding-bottom:40px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.close .eyebrow{margin-bottom:28px}
+.cl{font:400 96px/1 var(--serif);letter-spacing:-.012em}
+.cit{font:italic 400 40px/1.25 var(--serif);margin-top:28px;color:rgba(243,239,233,.9)}
+.cit2{font:500 23px/1.4 var(--sans);letter-spacing:.02em;margin-top:24px;color:var(--sage)}
+.contact{margin-top:58px;display:flex;align-items:center;gap:26px;text-align:left}
+.contact img{width:104px;height:104px;border-radius:50%;object-fit:cover;object-position:50% 22%;flex:none}
+.contact .nm{font:400 38px/1.05 var(--serif)}
+.contact .tel{font:500 25px/1.2 var(--sans);letter-spacing:.04em;font-variant-numeric:tabular-nums;margin-top:8px}
+.disc9{position:absolute;left:0;right:0;bottom:62px;text-align:center;font:400 17px/1.3 var(--sans);color:rgba(243,239,233,.5)}
+
+#grain{position:absolute;inset:0;width:100%;height:100%;opacity:.04;mix-blend-mode:overlay;pointer-events:none}
+#vig{position:absolute;inset:0;background:radial-gradient(ellipse 80% 74% at 50% 48%,rgba(0,0,0,0) 55%,rgba(0,0,0,.32) 100%);pointer-events:none}
+#brk{position:absolute;left:94px;top:85px;width:125px;height:21px}
+#label{position:absolute;right:94px;bottom:58px;font:500 16px/1 var(--sans);letter-spacing:.06em;color:rgba(243,239,233,.66)}
+
+.over{position:absolute;inset:0;z-index:20;display:grid;place-items:center;background:linear-gradient(rgba(10,9,8,.6),rgba(10,9,8,.2) 50%,rgba(10,9,8,.6));padding:16px}
+.over[hidden]{display:none!important}
+.gin{display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center}
+.gk{font:600 11px/1 var(--sans);letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+.bsolid{display:inline-flex;align-items:center;gap:10px;height:48px;padding:0 26px;background:var(--paper);color:#151413;border:1px solid var(--paper);font:600 14px/1 var(--sans);letter-spacing:.04em;cursor:pointer;text-decoration:none}
+.bsolid:hover{background:transparent;color:var(--paper)}
+.btext{background:none;border:0;color:var(--paper);font:500 13px/1 var(--sans);text-decoration:underline;text-underline-offset:4px;cursor:pointer;padding:6px}
+.bsolid:focus-visible,.btext:focus-visible,.ctl button:focus-visible,#prog:focus-visible{outline:1px solid var(--paper);outline-offset:3px}
+.ctl{display:flex;align-items:center;gap:6px;flex-wrap:wrap;min-width:0}
+.ctl button{background:none;border:1px solid rgba(243,239,233,.18);color:var(--paper);height:34px;min-width:34px;padding:0 10px;display:inline-grid;place-items:center;font:500 12px/1 var(--sans);letter-spacing:.03em;cursor:pointer}
+.ctl button:hover{border-color:rgba(243,239,233,.5)}
+.ctl button[aria-pressed="false"]{color:rgba(243,239,233,.45);text-decoration:line-through}
+.ctl svg{width:14px;height:14px;fill:currentColor}
+#prog{flex:1 1 160px;min-width:120px;height:34px;display:flex;align-items:center;cursor:pointer}
+#prog .tr{width:100%;height:4px;background:rgba(243,239,233,.18);position:relative}
+#bar{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--paper)}
+#time{font:500 12px/1 var(--sans);font-variant-numeric:tabular-nums;color:var(--muted);min-width:76px;text-align:center}
+html.render body{padding:0;overflow:hidden}
+html.render .app{display:block;padding:0}
+html.render .player{width:1440px}
+html.render #frame{width:1440px;height:1080px}
+html.render .ctl,html.render .over{display:none!important}
+@media (max-width:520px){#time{min-width:0}.ctl button{padding:0 8px}}
+</style>
+
+<div class="app">
+<div class="player">
+<div id="frame">
+<div id="stage" aria-hidden="true">
+
+<!-- 1 · On site, first -->
+<section class="scene" data-bars="4">
+  <div class="shot" data-b="0" data-n="3" data-cam="push" data-nobrand><video class="media" src="clip/site.mp4" muted playsinline preload="auto"></video></div>
+  <div class="shot" data-b="3" data-n="2" data-cam="push" data-nobrand><video class="media" src="clip/bclose.mp4" muted playsinline preload="auto"></video></div>
+  <div class="shot" data-b="5" data-n="3" data-cam="push" data-nobrand><video class="media" src="clip/bscaf.mp4" muted playsinline preload="auto"></video></div>
+  <div class="shot" data-b="8" data-n="2" data-cam="push" data-nobrand><video class="media" src="clip/mortar.mp4" muted playsinline preload="auto"></video></div>
+  <div class="shot" data-b="10" data-n="6" data-cam="push" data-rate="0.9" data-nobrand><video class="media" src="clip/brick.mp4" muted playsinline preload="auto"></video></div>
+  <div class="cap"><span class="l" data-in="0.6" data-fx="cap" data-out="7.4">In November, we open this to everyone.</span><span class="l" data-in="1.4" data-fx="cap" data-out="7.4">You’re seeing it first.</span></div>
+  <div class="cap"><span class="l" data-in="8.4" data-fx="cap" data-out="15.4">Already rising, on the corner of</span><span class="l" data-in="9.0" data-fx="cap" data-out="15.4">Church Street and Oldham Street.</span></div>
+</section>
+
+<!-- 2 · Title -->
+<section class="scene black" data-bars="1.5">
+  <div class="ttl">
+    <img class="a" src="img/osl_logo.png" alt="" data-in="0.3" data-fx="cap" data-d="1100" data-out="5.3">
+    <div class="b" data-in="1.1" data-fx="cap" data-d="1000" data-out="5.3">“A private preview”</div>
+  </div>
+</section>
+
+<!-- 3 · The building -->
+<section class="scene" data-bars="3">
+  <div class="shot" data-b="0" data-n="6" data-cam="custom" data-ar="1.4652" data-from="0.5,0.52,1600" data-to="0.56,0.5,1740" data-label="cgi"><img class="media free grade" src="img/sv1.jpg" alt=""></div>
+  <div class="shot" data-b="6" data-n="6" data-cam="custom" data-ar="1.9538" data-from="0.42,0.5,2120" data-to="0.5,0.5,2230" data-label="cgi"><img class="media free grade" src="img/sv2.jpg" alt=""></div>
+  <div class="scrim-tl" data-in="0" data-fx="none" data-out="5.9"></div>
+  <div class="scrim-bl" data-in="6" data-fx="none" data-out="11.9"></div>
+  <div class="cap hi"><span class="l" data-in="0.6" data-fx="cap" data-out="5.4">Designed by Ollier Smurthwaite</span><span class="l" data-in="1.2" data-fx="cap" data-out="5.4">in the spirit of the town’s mills.</span></div>
+  <div class="cap"><span class="l" data-in="6.6" data-fx="cap" data-out="11.4">Red brick, precast stone</span><span class="l" data-in="7.2" data-fx="cap" data-out="11.4">and tall, generous windows.</span></div>
+</section>
+
+<!-- 4 · Garden -->
+<section class="scene" data-bars="3">
+  <div class="shot" data-b="0" data-n="12" data-cam="custom" data-ar="1.9538" data-from="0.4,0.5,2120" data-to="0.52,0.52,2320" data-label="cgi"><img class="media free grade" src="img/gdn.jpg" alt=""></div>
+  <div class="scrim-bl" data-in="0" data-fx="none"></div>
+  <div class="cap"><span class="l" data-in="0.6" data-fx="cap" data-out="5.5">Fifteen one-bed apartments,</span><span class="l" data-in="1.2" data-fx="cap" data-out="5.5">completing in 2027.</span></div>
+  <div class="cap"><span class="l" data-in="6.4" data-fx="cap" data-out="11.4">Around a private residents’ garden,</span><span class="l" data-in="7.0" data-fx="cap" data-out="11.4">protected by planning, in perpetuity.</span></div>
+</section>
+
+<!-- 5 · Hyde -->
+<section class="scene" data-bars="3">
+  <div class="shot" data-b="0" data-n="2" data-cam="push" data-rate="0.88" data-nobrand><video class="media" src="clip/hcent.mp4" muted playsinline preload="auto"></video></div>
+  <div class="shot" data-b="2" data-n="3" data-cam="push" data-nobrand><video class="media" src="clip/ronhill.mp4" muted playsinline preload="auto"></video></div>
+  <div class="shot" data-b="5" data-n="3" data-cam="push" data-nobrand><video class="media" src="clip/market.mp4" muted playsinline preload="auto"></video></div>
+  <div class="shot" data-b="8" data-n="2" data-cam="push" data-nobrand><video class="media" src="clip/band.mp4" muted playsinline preload="auto"></video></div>
+  <div class="shot" data-b="10" data-n="2" data-cam="push" data-nobrand><video class="media" src="clip/park.mp4" muted playsinline preload="auto"></video></div>
+  <div class="cap"><span class="l" data-in="0.5" data-fx="cap" data-out="7.5">Hyde Central is a nine-minute walk.</span><span class="l" data-in="1.1" data-fx="cap" data-out="7.5">Manchester, around twenty minutes on.</span></div>
+</section>
+
+<!-- 6 · The two -->
+<section class="scene" data-bars="6">
+  <div class="shot ground" style="background:#181716" data-b="0" data-n="6" data-cam="custom" data-ar="1.5211" data-from="0.5,0.5,1250" data-to="0.79,0.79,2300" data-noclamp data-label="First floor plan">
+    <div class="media free"><img src="img/plan1.jpg" alt="" style="position:absolute;inset:0;width:100%;height:100%;display:block">
+      <svg viewBox="0 0 2700 1775" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible">
+        <rect x="1636" y="1276" width="982" height="403" fill="rgba(140,192,140,.20)" data-in="2.4" data-fx="fade" data-d="1000"/>
+        <path d="M1636 1276 H2618 V1679 H1636 Z" pathLength="1" fill="none" stroke="#8CC08C" stroke-width="9" stroke-linejoin="miter" data-in="1.6" data-fx="draw" data-d="1500"/>
+        <g data-in="2.8" data-fx="fade" data-d="800"><rect x="1636" y="1176" width="560" height="76" fill="#8CC08C"/><text x="1662" y="1228" font-family="Familjen Grotesk, Helvetica Neue, Arial, sans-serif" font-weight="600" font-size="38" letter-spacing="5" fill="#141413">PLOT 18 · FIRST FLOOR</text></g>
+      </svg>
+    </div>
+  </div>
+  <div class="shot ground" style="background:#181716" data-b="6" data-n="6" data-cam="custom" data-ar="1.5211" data-from="0.74,0.76,2150" data-to="0.8,0.8,2400" data-noclamp data-label="Second floor plan">
+    <div class="media free"><img src="img/plan2.jpg" alt="" style="position:absolute;inset:0;width:100%;height:100%;display:block">
+      <svg viewBox="0 0 2700 1775" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible">
+        <rect x="1636" y="1276" width="982" height="403" fill="rgba(140,192,140,.20)" data-in="7.0" data-fx="fade" data-d="1000"/>
+        <path d="M1636 1276 H2618 V1679 H1636 Z" pathLength="1" fill="none" stroke="#8CC08C" stroke-width="9" stroke-linejoin="miter" data-in="6.4" data-fx="draw" data-d="1500"/>
+        <g data-in="7.3" data-fx="fade" data-d="800"><rect x="1636" y="1176" width="560" height="76" fill="#8CC08C"/><text x="1662" y="1228" font-family="Familjen Grotesk, Helvetica Neue, Arial, sans-serif" font-weight="600" font-size="38" letter-spacing="5" fill="#141413">PLOT 24 · SECOND FLOOR</text></g>
+      </svg>
+    </div>
+  </div>
+  <div class="shot" data-b="12" data-n="5" data-cam="custom" data-ar="1.9538" data-from="0.46,0.5,2120" data-to="0.58,0.5,2240" data-label="cgi"><img class="media free grade" src="img/liv.jpg" alt=""></div>
+  <div class="shot" data-b="17" data-n="4" data-cam="custom" data-ar="1.9538" data-from="0.52,0.5,2120" data-to="0.47,0.5,2220" data-label="cgi"><img class="media free grade" src="img/bed.jpg" alt=""></div>
+  <div class="shot" data-b="21" data-n="3" data-cam="custom" data-ar="1.3239" data-from="0.5,0.5,1450" data-to="0.55,0.52,1550" data-label="cgi"><img class="media free grade" src="img/sho.jpg" alt=""></div>
+  <div class="scrim-bl" data-in="0" data-fx="none"></div>
+  <div class="cap"><span class="l" data-in="0.6" data-fx="cap" data-out="5.5">Two corner lofts have been</span><span class="l" data-in="1.2" data-fx="cap" data-out="5.5">held back for this preview.</span></div>
+  <div class="cap"><span class="l" data-in="6.6" data-fx="cap" data-out="11.5">Plots 18 and 24: the largest</span><span class="l" data-in="7.2" data-fx="cap" data-out="11.5">in the building, at 469 sq ft.</span></div>
+  <div class="cap"><span class="l" data-in="12.6" data-fx="cap" data-out="20.5">Sage kitchens, tall windows,</span><span class="l" data-in="13.2" data-fx="cap" data-out="20.5">a shower room in sage tile.</span></div>
+</section>
+
+<!-- 7 · The numbers -->
+<section class="scene" data-bars="3">
+  <div class="nums">
+    <div class="eyebrow" data-in="0.3" data-fx="cap" data-out="11.5">Plots 18 &amp; 24 · Corner lofts · 469 sq ft</div>
+    <div class="big" data-in="0.6" data-fx="cap" data-d="1200" data-out="11.5">£165,000</div>
+    <div class="row3">
+      <div class="fig"><div class="hair" data-in="2.6" data-fx="linex" data-d="900" data-out="11.5"></div><div class="v" data-in="2.8" data-fx="cap" data-out="11.5">£950</div><div class="k" data-in="3.0" data-fx="cap" data-out="11.5">Rent estimate, per month</div></div>
+      <div class="fig"><div class="hair" data-in="3.2" data-fx="linex" data-d="900" data-out="11.5"></div><div class="v" data-in="3.4" data-fx="cap" data-out="11.5">6.9%</div><div class="k" data-in="3.6" data-fx="cap" data-out="11.5">Gross yield (est.)</div></div>
+      <div class="fig"><div class="hair" data-in="3.8" data-fx="linex" data-d="900" data-out="11.5"></div><div class="v" data-in="4.0" data-fx="cap" data-out="11.5">2027</div><div class="k" data-in="4.2" data-fx="cap" data-out="11.5">Target completion</div></div>
+    </div>
+  </div>
+  <div class="foot" data-in="5" data-fx="cap" data-out="11.5">Rent and yield are BRIK Studios’ estimates, not guarantees.</div>
+</section>
+
+<!-- 8 · Close -->
+<section class="scene" data-bars="3.5">
+  <div class="shot ground bgstill" data-b="0" data-n="14" data-cam="push"><img class="media" src="img/sv2.jpg" alt=""></div>
+  <div class="close">
+    <div class="eyebrow" data-in="0.4" data-fx="cap">A private preview</div>
+    <div class="cl" data-in="0.8" data-fx="cap" data-d="1100">Oldham Street Lofts</div>
+    <div class="cit" data-in="2.4" data-fx="cap">You’re one of a handful of people seeing this.</div>
+    <div class="cit2" data-in="4" data-fx="cap">Two corner lofts, held for this preview · Reserve with £3,500</div>
+  </div>
+  <div class="disc9" data-in="7" data-fx="cap">CGIs are indicative and may not show plots 18 or 24. Figures are estimates, not guarantees.</div>
+</section>
+
+<canvas id="grain" width="640" height="360"></canvas>
+<div id="vig"></div>
+<img id="brk" src="img/brk.png" alt="">
+<div id="label"></div>
+</div>
+
+<div class="over" id="gate">
+  <div class="gin">
+    <div class="gk">A private preview · <span id="dur">1:12</span></div>
+    <button class="bsolid" id="playSound" type="button"><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" fill="currentColor"><path d="M4 2.5v11l9-5.5z"/></svg>Play with sound</button>
+    <button class="btext" id="playMuted" type="button">Play muted</button>
+  </div>
+</div>
+<div class="over" id="end" hidden>
+  <div class="gin">
+    <button class="bsolid" id="again" type="button">Watch again</button>
+  </div>
+</div>
+</div>
+
+<div class="ctl" role="group" aria-label="Film controls">
+  <button id="bPlay" type="button" aria-label="Play"><svg viewBox="0 0 16 16" aria-hidden="true"><path id="icoPlay" d="M4 2.5v11l9-5.5z"/></svg></button>
+  <button id="bRestart" type="button" aria-label="Restart"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 3V0L4 4l4 4V5a4 4 0 1 1-4 4H2a6 6 0 1 0 6-6z"/></svg></button>
+  <div id="prog" role="slider" tabindex="0" aria-label="Seek" aria-valuemin="0" aria-valuemax="72" aria-valuenow="0"><div class="tr"><div id="bar"></div></div></div>
+  <span id="time">0:00 / 1:12</span>
+  <button id="bSound" type="button" aria-pressed="true">Sound</button>
+</div>
+</div>
+</div>
+
+<script>
+(()=>{
+const BPM=90.67, BEAT=60000/BPM, GATE_T=28.3*BEAT, SW=1440, SH=1080;
+const RENDER=location.hash==='#render';
+if(RENDER) document.documentElement.classList.add('render');
+const $=id=>document.getElementById(id);
+const stage=$('stage'), frame=$('frame');
+const clamp=x=>x<0?0:x>1?1:x;
+const quint=p=>1-Math.pow(1-p,5);
+const powIn=p=>p*p;
+const ios=p=>-(Math.cos(Math.PI*p)-1)/2;
+const eio=p=>p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2;
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+let total=0;
+const S=[...stage.querySelectorAll('.scene')].map(el=>{
+  const s={el,start:total,dur:+el.dataset.bars*4*BEAT}; total+=s.dur;
+  s.shots=[...el.querySelectorAll('.shot')].map(sh=>({el:sh,b:+sh.dataset.b*BEAT,n:+sh.dataset.n*BEAT,cam:sh.dataset.cam||'none',
+    media:sh.querySelector('.media'),vid:sh.querySelector('video'),rate:+(sh.dataset.rate||1),label:sh.dataset.label||'',nobrand:sh.hasAttribute('data-nobrand'),
+    photo:!!sh.querySelector('video,img.media:not(.free)')&&!sh.classList.contains('bgstill'),noclamp:sh.hasAttribute('data-noclamp'),
+    from:sh.dataset.from?sh.dataset.from.split(',').map(Number):null,to:sh.dataset.to?sh.dataset.to.split(',').map(Number):null,ar:+(sh.dataset.ar||1)}));
+  s.els=[...el.querySelectorAll('[data-in]')].map(e=>({e,tin:+e.dataset.in*BEAT,tout:e.dataset.out!=null?+e.dataset.out*BEAT:1e12,d:+(e.dataset.d||900),fx:e.dataset.fx||'cap'}));
+  return s;});
+S.forEach(s=>s.shots.forEach(sh=>{ if(sh.cam==='custom'){ const W0=Math.max(sh.from[2],sh.to[2]); sh.W0=W0; sh.media.style.width=W0+'px'; sh.media.style.height=(W0/sh.ar)+'px'; }}));
+const TOTAL=total;
+
+function cam(sh,p){
+  const m=sh.media; if(!m) return;
+  if(sh.cam==='custom'){
+    const k=ios(p), f=sh.from, g=sh.to, fx=f[0]+(g[0]-f[0])*k, fy=f[1]+(g[1]-f[1])*k, W=f[2]+(g[2]-f[2])*k, H=W/sh.ar;
+    let x=SW/2-fx*W, y=SH/2-fy*H;
+    if(!sh.noclamp){ x=Math.min(0,Math.max(SW-W,x)); y=Math.min(0,Math.max(SH-H,y)); }
+    m.style.transform=`translate3d(${x.toFixed(2)}px,${y.toFixed(2)}px,0) scale(${(W/sh.W0).toFixed(5)})`;
+    return;
+  }
+  let e=.7*p+.3*ios(p); if(reduce) e*=.25;
+  const sc=sh.cam==='push'?1.005+.035*e:1;
+  m.style.transform=`scale(${sc.toFixed(5)})`;
+}
+function applyEl(o,lt){
+  let op=0,y=0,blur=0,tf=null;
+  const p=lt>=o.tin?quint(clamp((lt-o.tin)/o.d)):0;
+  if(o.fx==='cap'){op=p;y=8*(1-p);blur=5*(1-p)}
+  else if(o.fx==='fade'){op=p}
+  else if(o.fx==='linex'){op=lt>=o.tin?1:0; tf=`scaleX(${eio(clamp((lt-o.tin)/o.d)).toFixed(4)})`}
+  else if(o.fx==='draw'){op=lt>=o.tin?1:0; o.e.style.strokeDasharray='1'; o.e.style.strokeDashoffset=(1-eio(clamp((lt-o.tin)/o.d))).toFixed(4)}
+  else op=lt>=o.tin?1:0;
+  if(lt>=o.tout){const q=powIn(clamp((lt-o.tout)/480)); op*=1-q; blur+=4*q;}
+  const st=o.e.style; st.opacity=op.toFixed(4);
+  if(tf) st.transform=tf; else if(o.fx==='cap') st.transform=`translate3d(0,${y.toFixed(2)}px,0)`;
+  if(o.fx==='cap') st.filter=blur>0.05?`blur(${blur.toFixed(2)}px)`:'';
+}
+
+const gc=$('grain'), gx=gc.getContext('2d'), GF=[];
+(function(){let seed=2127;const rnd=()=>{seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296};
+  for(let f=0;f<6;f++){const im=gx.createImageData(640,360);for(let i=0;i<im.data.length;i+=4){const v=rnd()*255|0;im.data[i]=im.data[i+1]=im.data[i+2]=v;im.data[i+3]=255}GF.push(im)}})();
+let lastG=-1;
+
+const brk=$('brk'), label=$('label'), vig=$('vig');
+let playing=false, pend=[];
+const LBL={cgi:'Computer-generated image'};
+function syncVid(sh,sl){
+  const v=sh.vid, want=Math.min(sl/1000*sh.rate+0.02,(v.duration||99)-0.05);
+  if(v.playbackRate!==sh.rate) v.playbackRate=sh.rate;
+  if(playing){ if(v.paused){v.currentTime=want; v.play().catch(()=>{});} else if(Math.abs(v.currentTime-want)>.2) v.currentTime=want; }
+  else { if(!v.paused) v.pause(); if(Math.abs(v.currentTime-want)>.015){ pend.push(new Promise(r=>{const done=()=>{v.removeEventListener('seeked',done);r()}; v.addEventListener('seeked',done); setTimeout(done,4000);})); v.currentTime=want; } }
+}
+function render(t){
+  t=Math.max(0,Math.min(TOTAL-1,t)); let shot=null;
+  for(const s of S){
+    const lt=t-s.start, on=lt>=0&&lt<s.dur; s.el.style.visibility=on?'visible':'hidden';
+    if(!on){ for(const sh of s.shots){ if(sh.el.style.visibility!=='hidden') sh.el.style.visibility='hidden'; if(sh.vid&&!sh.vid.paused) sh.vid.pause(); } continue; }
+    for(const sh of s.shots){ const sl=lt-sh.b, son=sl>=0&&sl<sh.n; sh.el.style.visibility=son?'visible':'hidden';
+      if(!son){ if(sh.vid&&!sh.vid.paused) sh.vid.pause(); continue; }
+      shot=sh; cam(sh,sl/sh.n); if(sh.vid) syncVid(sh,sl); }
+    for(const o of s.els) applyEl(o,lt);
+  }
+  brk.style.opacity=shot&&shot.nobrand?0:1;
+  const lt=shot?(LBL[shot.label]??shot.label):''; if(label.textContent!==lt) label.textContent=lt;
+  vig.style.opacity=shot&&shot.photo?1:.5; gc.style.opacity=shot&&shot.photo?.04:.025;
+  const gf=Math.floor(t/41.7)%6; if(gf!==lastG){gx.putImageData(GF[gf],0,0);lastG=gf}
+  $('bar').style.width=(t/TOTAL*100).toFixed(3)+'%';
+  $('time').textContent=mmss(t)+' / '+mmss(TOTAL); $('prog').setAttribute('aria-valuenow',Math.round(t/1000));
+}
+const mmss=ms=>{const s=Math.round(ms/1000);return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')};
+$('dur').textContent=mmss(TOTAL);
+
+const aMix=new Audio('audio/music.mp3'); aMix.preload='auto';
+let sound=true, t=0, lastNow=0, started=false;
+function audioGo(){ aMix.pause(); if(!sound||!playing) return; try{aMix.currentTime=t/1000}catch(e){} aMix.play().catch(()=>{}); }
+function setPlaying(p){ playing=p; $('bPlay').setAttribute('aria-label',p?'Pause':'Play');
+  $('icoPlay').setAttribute('d',p?'M3.5 2.5h3v11h-3zM9.5 2.5h3v11h-3z':'M4 2.5v11l9-5.5z');
+  if(p){ lastNow=performance.now(); requestAnimationFrame(tick); } audioGo(); if(!p) render(t); }
+function tick(now){ if(!playing) return; t+=now-lastNow; lastNow=now;
+  if(t>=TOTAL){ t=TOTAL-1; render(t); setPlaying(false); $('end').hidden=false; return; }
+  if(sound&&!aMix.paused&&Math.abs(aMix.currentTime*1000-t)>140) aMix.currentTime=t/1000;
+  render(t); requestAnimationFrame(tick); }
+function start(withSound){ $('gate').hidden=true; $('end').hidden=true; started=true; sound=withSound; $('bSound').setAttribute('aria-pressed',String(sound)); t=0; setPlaying(true); }
+$('playSound').onclick=()=>start(true);
+$('playMuted').onclick=()=>start(false);
+$('again').onclick=()=>start(sound);
+$('bPlay').onclick=()=>{ if(!started){start(true);return} if(t>=TOTAL-2){start(sound);return} setPlaying(!playing); };
+$('bRestart').onclick=()=>{ if(!started){start(true);return} $('end').hidden=true; t=0; render(0); setPlaying(true); };
+$('bSound').onclick=e=>{ sound=!sound; e.currentTarget.setAttribute('aria-pressed',String(sound)); audioGo(); };
+function seekTo(ms){ t=Math.max(0,Math.min(TOTAL-1,ms)); $('end').hidden=true; if(!started){ started=true; $('gate').hidden=true; } render(t); audioGo(); }
+$('prog').addEventListener('pointerdown',e=>{ const r=e.currentTarget.getBoundingClientRect(); seekTo((e.clientX-r.left)/r.width*TOTAL); });
+$('prog').addEventListener('keydown',e=>{ if(e.key==='ArrowRight'){seekTo(t+5000);e.preventDefault()} if(e.key==='ArrowLeft'){seekTo(t-5000);e.preventDefault()} });
+document.addEventListener('keydown',e=>{ if(e.code==='Space'&&e.target===document.body){ e.preventDefault(); $('bPlay').click(); } });
+function fit(){ if(RENDER){stage.style.transform='none';return} stage.style.transform=`scale(${frame.clientWidth/SW})`; }
+addEventListener('resize',fit); fit();
+if(window.ResizeObserver) new ResizeObserver(fit).observe(frame);
+window.__total=TOTAL;
+window.__seek=async ms=>{ playing=false; pend=[]; t=ms; render(ms); if(pend.length) await Promise.all(pend); render(ms); await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))); return true; };
+render(RENDER?0:GATE_T);
+if(document.fonts) document.fonts.ready.then(()=>render(RENDER?t:GATE_T));
+})();
+</script>
+
+</body></html>
