@@ -2201,7 +2201,7 @@ html.coverlock,html.coverlock body{overflow:hidden!important}
     <span class="mask plogo lg2 footmark" role="img" aria-label="Oldham Street Lofts, Syddall Street, Hyde SK14 1LB"></span>
     <div class="footrow">
       <span class="flogos"><span class="logo mask" role="img" aria-label="BRIK Studios"></span><span class="bcap mask" role="img" aria-label="BRIK Capital"></span></span>
-      <p>Details are for guidance only and don't form part of any offer or contract. Rents are BRIK Studios' estimates and the service charge is still being set. Images are computer-generated and indicative; floor plans are not to scale.</p>
+      <p>Details are for guidance only and don't form part of any offer or contract. Rents and service charges are BRIK Studios' estimates. Images are computer-generated and indicative; floor plans are not to scale.</p>
 
     </div>
   </footer>
@@ -2243,19 +2243,20 @@ const U=[
 const TAKE="Quality stock is scarce here, and the best product always lets first and lets for more.";
 const TAKE_LONG="We believe it will be one of the best developments ever delivered in Hyde, and that is exactly why we expect it to command rents at the top of the local market. Quality stock is scarce here, and the best product always lets first and lets for more.";
 const ONE=U.length===1;
-U.forEach(u=>{u.sc=0;u.dep=u.price*.2;u.psf=u.price/u.area;u.num=u.name.replace(/\D/g,"");u.ref=(u.num||"OSL")+"-OSL"});
+const SC_RATE=2.24; // £ per sq ft per year
+U.forEach(u=>{u.sc=u.area*SC_RATE/12;u.dep=u.price*.2;u.psf=u.price/u.area;u.num=u.name.replace(/\D/g,"");u.ref=(u.num||"OSL")+"-OSL"});
 const PAY={total:3500,deposit:3000,admin:500};
 const LTV=.75, RATE=.04, MGMT=.10, LEGAL_EX=1200, LEGAL_COMP=700;
 function sdlt(p){const b=[[125000,.05],[250000,.07],[925000,.10],[1500000,.15],[1e12,.17]];let t=0,lo=0;for(const[hi,r]of b){if(p>lo)t+=(Math.min(p,hi)-lo)*r;lo=hi}return t}
-/* net = rent less mortgage interest and letting management, before the service charge (still being set) */
-function calc(u){const mort=u.price*LTV*RATE/12,mg=u.rent*MGMT,net=u.rent-mort-mg,top=u.price*(1-LTV)-u.dep,compPay=top-PAY.deposit,
-  ex=PAY.total+u.dep+LEGAL_EX,st=sdlt(u.price),comp=ex+compPay+st+LEGAL_COMP;
-  return {mort,mg,net,yld:u.rent*12/u.price*100,loan:u.price*LTV,top,compPay,ex,st,comp,bal:u.dep}}
+/* net = rent less mortgage interest, service charge and letting management */
+function calc(u){const mort=u.price*LTV*RATE/12,mg=u.rent*MGMT,net=u.rent-mort-u.sc-mg,top=u.price*(1-LTV)-u.dep,bal=u.dep-PAY.deposit,
+  ex=PAY.total+bal+LEGAL_EX,st=sdlt(u.price),comp=ex+top+st+LEGAL_COMP;
+  return {mort,mg,net,yld:u.rent*12/u.price*100,loan:u.price*LTV,top,ex,st,comp,bal}}
 const GALLERY=[{src:"var(--hero)",cap:"Corner of Church Street and Oldham Street, CGI"},{src:"var(--garden)",cap:"The walkway and resident garden, CGI"},{src:"var(--main)",cap:"The Syddall Street frontage, CGI"},
  {src:"var(--kitchen)",cap:"Living space, CGI"},{src:"var(--bed)",cap:"Bedroom, CGI"},{src:"var(--bath)",cap:"Shower room, CGI"},
  {src:"var(--fa18)",cap:"First floor, Plot 18 highlighted",plan:1},{src:"var(--fa24)",cap:"Second floor, Plot 24 highlighted",plan:1},
  {src:"var(--h_site)",cap:"On site, August 2026"}];
-const ESS=[["Lease","999 years"],["Ground rent","Peppercorn"],["Service charge","Being set now; we'll confirm it before you reserve"],["Build warranty","ABC+, accepted by most major lenders"],["Reservation","£3,500"],["Exchange","20% deposit"],["Completion","Expected mid 2027"],["Extras","A shared resident garden, guaranteed by planning in perpetuity, and a secure bike space for every apartment"],["Freehold","Passes to a management company owned by the apartment buyers"],["Developer","Ascot Hyde Ltd"],["Architect","Ollier Smurthwaite"],["Planning","24/00783/FUL, granted 23 April 2025"]];
+const ESS=[["Lease","999 years"],["Ground rent","Peppercorn"],["Service charge","£2.24 per sq ft per year (about £88 pcm for Plots 18 and 24)"],["Build warranty","ABC+, accepted by most major lenders"],["Reservation","£3,000 reservation deposit, which counts towards your 20%, plus a £500 admin fee"],["Exchange","20% deposit"],["Completion","Expected mid 2027"],["Extras","A shared resident garden, guaranteed by planning in perpetuity, and a secure bike space for every apartment"],["Freehold","Passes to a management company owned by the apartment buyers"],["Developer","Ascot Hyde Ltd"],["Architect","Ollier Smurthwaite"],["Planning","24/00783/FUL, granted 23 April 2025"]];
 const ROOMS=[
  {t:"Open plan living",img:"var(--kitchen)",l:["Open plan living and kitchen","Sage kitchen","Tall windows","Laminate floors","Its own KERS heat pump water heater"]},
  {t:"Bedroom",img:"var(--bed)",l:["Separate double bedroom","Carpeted","Its own window"]},
@@ -2329,8 +2330,8 @@ function cmpView(){const l=shown();if(!l.length)return emptyState();const one=l.
     <div><span>Size</span><span>${sq(u.area)} sq ft, ${u.type}</span></div>
     <div><span>Standout feature</span><span>${u.stand}</span></div>
     <div><span>Rent estimate</span><span>${gbp(u.rent)} pcm, ${calc(u).yld.toFixed(1)}% gross</span></div><div><span>Price per sq ft</span><span>${gbp(u.psf)}</span></div>
-    <div><span>Before service charge</span><span>${gbp(calc(u).net)} pcm</span></div>
-    <div><span>Service charge</span><span>Being set now</span></div>
+    <div><span>Net cash flow, est.</span><span>${gbp(calc(u).net)} pcm</span></div>
+    <div><span>Service charge, est.</span><span>${gbp(u.sc)} pcm</span></div>
     <div><span>Ground rent</span><span>Peppercorn</span></div>
     <div><span>To reserve</span><span>${gbp(PAY.total)}</span></div>
     <div><span>20% on exchange</span><span>${gbp(u.dep)}</span></div>
@@ -2350,7 +2351,7 @@ function uSwitch(){if(ONE)return "";const cu=S.calcU;return `<div class="uswitch
 function defaultCalc(){if(!S.calcU)S.calcU=(U.find(u=>S.react[u.id]==="like")||U[0]).id;return find(S.calcU)}
 const STEPS=[["Appraise","You've reviewed the development and the numbers.","Our research and reporting help you decide whether Oldham Street Lofts suits your investment goals.","search"],
  ["Choose on a video call","30 minutes on Teams with Charlie.","He'll take you through the site, the film, the floor plans and the numbers, and help you choose between "+U.map(u=>u.name).join(" and ")+".","home"],
- ["Reserve","£3,500 takes it off the market.","£3,000 is credited against your purchase and £500 is BRIK Studios' admin fee.","key"],
+ ["Reserve","£3,500 takes it off the market.","£3,000 is your reservation deposit and counts towards your 20% deposit. £500 is BRIK Studios' admin fee.","key"],
  ["Legal process","Jawaad and your solicitor guide you through.","AML checks, then an introduction to our panel solicitor and, if you need one, our mortgage broker.","doc"],
  ["Exchange","20% deposit on exchange.","Contracts are exchanged and the apartment is legally yours to complete on.","pen"],
  ["Completion","Expected mid 2027.","Pay the balance and collect your keys. We can help with mortgages, furniture and letting.","flag"]];
@@ -2359,10 +2360,10 @@ const SI={search:'<svg viewBox="0 0 24 24" class="li"><circle cx="11" cy="11" r=
  pen:'<svg viewBox="0 0 24 24" class="li"><path d="M4 20l4-1 11-11-3-3L5 16z"/><path d="M14 6l3 3"/></svg>',flag:'<svg viewBox="0 0 24 24" class="li"><path d="M5 21V4M5 4h11l-2 4 2 4H5"/></svg>',
  cal:'<svg viewBox="0 0 24 24" class="li"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>'};
 function nextTab(){const u=defaultCalc(),c=calc(u),cur=1,ps=S.payStep||0;
-  const STOPS=[{when:"Today",sub:"To reserve",title:"Reserve "+u.name,amt:PAY.total,rows:[["Reservation, credited against your purchase",PAY.deposit],["Admin fee to BRIK Studios",PAY.admin]],note:"Takes "+u.name+" off the market straight away."},
-   {when:"On exchange",sub:"Exchange",title:"Exchange contracts",amt:u.dep+LEGAL_EX,rows:[["20% deposit",u.dep],["Legal fees, estimate",LEGAL_EX]],note:"Your solicitor handles the paperwork; Jawaad keeps it moving."},
-   {when:"Mid 2027",sub:"On completion",title:"Collect your keys",amt:c.compPay+c.st+LEGAL_COMP,rows:[["5% top-up with a 75% mortgage, less your £3,000 reservation",c.compPay],["Stamp duty*",c.st],["Legal fees, estimate",LEGAL_COMP]],note:"Your mortgage covers the remaining 75%."}];
-  const run=[PAY.total,PAY.total+u.dep+LEGAL_EX,c.comp];const st=STOPS[ps];
+  const STOPS=[{when:"Today",sub:"To reserve",title:"Reserve "+u.name,amt:PAY.total,rows:[["Reservation deposit, counts towards your 20%",PAY.deposit],["Admin fee to BRIK Studios",PAY.admin]],note:"Takes "+u.name+" off the market straight away."},
+   {when:"Exchange",sub:"Rest of your 20%",title:"Exchange contracts",amt:c.bal+LEGAL_EX,rows:[["Rest of your 20% deposit",c.bal],["Legal fees, estimate",LEGAL_EX]],note:"Your solicitor handles the paperwork; Jawaad keeps it moving."},
+   {when:"Mid 2027",sub:"On completion",title:"Collect your keys",amt:c.top+c.st+LEGAL_COMP,rows:[["5% top-up, with a 75% mortgage",c.top],["Stamp duty*",c.st],["Legal fees, estimate",LEGAL_COMP]],note:"Your mortgage covers the remaining 75%."}];
+  const run=[PAY.total,PAY.total+c.bal+LEGAL_EX,c.comp];const st=STOPS[ps];
   return `<div class="pane">
   <section class="hero-next"><div><div class="cap">Next steps</div><h2 class="big-h">Book your video call.</h2>
    <p class="lead">Two corner lofts are held back for this preview. Book a 30-minute Teams call with Charlie to go through the site, the plans and the numbers, and choose yours before they go on general release.</p>
@@ -2402,20 +2403,20 @@ function returnsTab(){const u=defaultCalc(),c=calc(u),y=r=>(r*12/u.price*100).to
    <div class="stats s4">
     <div><div class="cap">Rent estimate</div><div class="v">${gbp(u.rent)} <small>pcm</small></div></div>
     <div><div class="cap">Gross yield</div><div class="v">${c.yld.toFixed(1)}%</div></div>
-    <div class="hl"><div class="cap">Before service charge</div><div class="v">£${c.net.toFixed(2)} <small>pcm</small></div></div>
+    <div class="hl"><div class="cap">Net monthly cash flow</div><div class="v">£${c.net.toFixed(2)} <small>pcm</small></div></div>
     <div><div class="cap">Total cash needed</div><div class="v">${gbp(c.comp)}</div></div></div></section>
   <div class="cols2">
   <section class="sec"><div class="cap"><span>Monthly figures</span></div>
    <div class="rows big"><div><span>Rent estimate</span><span>${gbp(u.rent)}</span></div>
     <div><span>Mortgage, 75% at 4% interest only</span><span>−£${c.mort.toFixed(2)}</span></div>
     <div><span>Letting management, 10%</span><span>−${gbp(c.mg)}</span></div>
+    <div><span>Service charge, est., £2.24 per sq ft per year</span><span>−£${u.sc.toFixed(2)}</span></div>
     <div><span>Ground rent</span><span>Peppercorn</span></div>
-    <div class="tot hlrow"><span>Before service charge</span><span>£${c.net.toFixed(2)}</span></div>
-    <div><span>Service charge</span><span>Being set</span></div></div>
-   <p class="fine" style="margin-top:12px">The service charge budget is being set by the block manager and will be split by floor area. There's no lift, lounge or gym in the building, which keeps it lean. We'll confirm the figure before you reserve.</p></section>
+    <div class="tot hlrow"><span>Net monthly cash flow</span><span>£${c.net.toFixed(2)}</span></div></div>
+   <p class="fine" style="margin-top:12px">There's no lift, lounge or gym in the building, which keeps the service charge lean.</p></section>
   <section class="sec"><div class="cap"><span>Cash needed</span></div>
-   <div class="rows big"><div><span>Reservation, including £500 admin fee</span><span>${gbp(PAY.total)}</span></div><div><span>20% deposit on exchange</span><span>${gbp(u.dep)}</span></div>
-    <div><span>5% top-up for a 75% mortgage, less £3,000 reservation</span><span>${gbp(c.compPay)}</span></div>
+   <div class="rows big"><div><span>20% deposit, including your £3,000 reservation</span><span>${gbp(u.dep)}</span></div><div><span>Admin fee</span><span>${gbp(PAY.admin)}</span></div>
+    <div><span>5% top-up for a 75% mortgage</span><span>${gbp(c.top)}</span></div>
     <div><span>Stamp duty*</span><span>${gbp(c.st)}</span></div><div><span>Legal fees, estimate</span><span>${gbp(LEGAL_EX+LEGAL_COMP)}</span></div>
     <div class="tot hlrow"><span>Total cash deployed</span><span>${gbp(c.comp)}</span></div></div></section></div>
   <section class="sec"><div class="cap"><span>Rental evidence</span><span>Live listings, 25 October 2026</span></div>
@@ -2468,14 +2469,14 @@ CH.overview=()=>`<section class="ch" id="overview">${chh("01","Investment overvi
   <div><div class="cap">Gross yield</div><div class="v g" data-count="${C0.yld.toFixed(1)}" data-dec="1" data-suf="%">${pct(C0.yld)}</div><small>on ${gbp(U0.rent)} pcm, estimated</small></div>
   <div><div class="cap">Size</div><div class="v" data-count="${U0.area}" data-suf=" sq ft">${U0.area} sq ft</div><small>the largest type in the building</small></div>
   <div><div class="cap">Price per sq ft</div><div class="v" data-count="${Math.round(U0.psf)}" data-pre="£">${gbp(U0.psf)}</div><small>the lowest in the building</small></div>
-  <div><div class="cap">Completion</div><div class="v">Mid 2027</div><small>expected</small></div></div>
+  <div><div class="cap">Net cash flow</div><div class="v g" data-count="${C0.net.toFixed(2)}" data-pre="£" data-dec="2">£${C0.net.toFixed(2)}</div><small>per month, after costs</small></div></div>
  <div class="phases">${[["Planning","Granted","April 2025, 24/00783/FUL",""],["On site","Building now","Frame and blockwork going up",""],["Private preview","Open now","Plots 18 and 24 held back","now"]].map(([a,b,c,k])=>`<div class="ph3 ${k}"><span class="cap">${a}</span><b>${b}</b><small>${c}</small></div>`).join("")}<p class="phn">Plots 18 and 24 are the only two corner lofts in the building. You're early: they're being shown to a small group of investors before the wider launch. Book a video call with Charlie to choose yours.</p></div>
  <button class="hero-img" data-img="hero" data-cap="Corner of Church Street and Oldham Street, CGI" aria-label="View the Oldham Street Lofts image"><span class="cap">Corner of Church Street and Oldham Street, CGI</span><span class="patch wm" aria-hidden="true"><i></i></span></button>
  <div class="duo w" style="margin-top:52px"><div><div class="cap" style="margin-bottom:14px">Why it's rare</div><h3 class="big-h">Almost nothing new to rent in Hyde.</h3>
   <div class="body"><p class="lead">When we checked the listings in October, the only one beds to rent in Hyde were two older first floor flats on Market Street and Market Place. Oldham Street Lofts will be brand new, with a resident garden and a secure bike space for every apartment.</p>
   <p class="muted" style="margin-top:14px">It's rare product for the town: character stock minutes from the market place and Hyde Central, for buyers and renters being priced out of Manchester's mill conversions.</p>
   </div></div>
-  <div class="esspanel"><svg class="solid" viewBox="222 128 334 170" aria-hidden="true"><path d="M222 298V140H520L556 176V298Z"/></svg><div class="cap">The essentials</div><div class="rows big">${[["Lease","999 years"],["Ground rent","Peppercorn"],["Service charge","Being set now"],["Build warranty","ABC+"],["Reservation","£3,500"],["Exchange","20% deposit"],["Completion","Expected mid 2027"],["Extras","Resident garden, bike space per apartment"]].map(([a,b])=>`<div><span>${a}</span><span>${b}</span></div>`).join("")}</div></div></div>
+  <div class="esspanel"><svg class="solid" viewBox="222 128 334 170" aria-hidden="true"><path d="M222 298V140H520L556 176V298Z"/></svg><div class="cap">The essentials</div><div class="rows big">${[["Lease","999 years"],["Ground rent","Peppercorn"],["Service charge","£2.24 per sq ft per year"],["Build warranty","ABC+"],["Reservation","£3,000 + £500 admin fee"],["Exchange","20% deposit"],["Completion","Expected mid 2027"],["Extras","Resident garden, bike space per apartment"]].map(([a,b])=>`<div><span>${a}</span><span>${b}</span></div>`).join("")}</div></div></div>
  <div class="duo w" style="margin-top:56px"><div><div class="cap" style="margin-bottom:14px">The commuter belt</div><h3 class="big-h">Manchester, at a fraction of city prices.</h3>
   <div class="body"><p class="lead">Hyde Central is a 9-minute walk from the site, and trains reach Manchester Piccadilly in about 18 to 22 minutes. Manchester city centre is 7.5 miles away, Stockport 5 and Glossop 6.</p>
   <p class="muted" style="margin-top:14px">Oldham Street Lofts is another strategic play for us in Manchester's commuter belt: finding value in the boroughs around the city centre, and backing schemes with the quality to lead their town.</p></div></div>
@@ -2552,7 +2553,7 @@ const WA_="https://wa.me/447353164480?text=",WAI=`<svg viewBox="0 0 24 24" class
 const TABS={overview:"Investment overview",building:"The building",heritage:"Hyde's heritage",location:"Location",hyde:"Why Hyde",data:"The data",returns:"Returns",units:"Recommended units",next:"Next steps"};
 const NEXT={overview:["returns","Look at the numbers"],building:["heritage","Next: Hyde's heritage"],heritage:["location","Next: the location"],location:["hyde","Next: why Hyde"],hyde:["data","Next: the data"],data:["returns","Look at the numbers"],returns:["units","See the recommended apartments"],units:["next","Book a video call"]};
 function nextCta(id){const n=NEXT[id];if(!n)return"";return `<div class="nextcta"><div class="ncroof">${roofline()}</div><div class="nct"><span class="cap">Up next</span><b class="serif">${TABS[n[0]]}</b></div><button class="b solid" data-goto="${n[0]}">${n[1]} ${ARROW}</button></div>`}
-function howBlocks(){return `<section class="sec"><div class="cap"><span>How it works</span><span>What you're buying</span></div><div class="buy4">${[["key","You buy an apartment off-plan","Plot 18 or Plot 24, chosen with Charlie on a video call before they go on general release."],["doc","999-year lease, peppercorn ground rent","With an ABC+ build warranty. Completion is expected mid 2027."],["pen","Pay in stages","£3,500 to reserve, 20% on exchange, then the balance on completion, usually with a 75% buy-to-let mortgage."],["flag","Hands off after","We find the tenant and manage the letting for 10% of the rent, which is already in the numbers in this report."]].map(([ic,t,d],i)=>`<div class="bt4 rise"><span class="n">${i+1}</span><i class="pi">${SI[ic]}</i><b>${t}</b><p>${d}</p></div>`).join("")}</div>
+function howBlocks(){return `<section class="sec"><div class="cap"><span>How it works</span><span>What you're buying</span></div><div class="buy4">${[["key","You buy an apartment off-plan","Plot 18 or Plot 24, chosen with Charlie on a video call before they go on general release."],["doc","999-year lease, peppercorn ground rent","With an ABC+ build warranty. Completion is expected mid 2027."],["pen","Pay in stages","£3,000 to reserve plus a £500 admin fee, the rest of your 20% on exchange, then the balance on completion, usually with a 75% buy-to-let mortgage."],["flag","Hands off after","We find the tenant and manage the letting for 10% of the rent, which is already in the numbers in this report."]].map(([ic,t,d],i)=>`<div class="bt4 rise"><span class="n">${i+1}</span><i class="pi">${SI[ic]}</i><b>${t}</b><p>${d}</p></div>`).join("")}</div>
  <div class="handsoff"><i class="mask hoscout" aria-hidden="true"></i><div><div class="cap">After completion</div><h3 class="big-h" style="color:#fff">We take care of it all.</h3><p>Tenant find, referencing, rent collection and day-to-day management, for 10% of the rent. You don't need to live nearby or lift a finger.</p></div></div>
 </section>`}
 const EARLY=`<div class="earlynote"><span class="pl"><i></i>Private preview</span><p><b>Two corner lofts, held back.</b> Plots 18 and 24 are the largest apartments in the building and the best value per square foot. You're seeing them before anyone else, on a video call with Charlie, ahead of general release.</p></div>`;
@@ -2669,14 +2670,14 @@ function unitPanel(id){const u=find(id),p=$("#pOff"),c=calc(u);p.dataset.id=id;p
      <div><div class="cap">Size</div><div class="v">${sq(u.area)} <small>sq ft</small></div></div>
      <div><div class="cap">Per sq ft</div><div class="v">${gbp(u.psf)}</div></div>
      <div><div class="cap">20% on exchange</div><div class="v">${gbp(u.dep)}</div></div>
-     <div><div class="cap">Ground rent</div><div class="v">Peppercorn</div></div>
+     <div><div class="cap">Service charge</div><div class="v">${gbp(u.sc)} <small>pcm est.</small></div></div>
      <div><div class="cap">To reserve</div><div class="v">${gbp(PAY.total)}</div></div>
     </div></div>
    <div class="sec lc"><div class="cap"><span>Returns at a glance</span><button class="txt" data-goreturns="${id}">Full breakdown</button></div>
-    <div class="stats"><div><div class="cap">Rent estimate</div><div class="v">${gbp(u.rent)} <small>pcm</small></div></div><div><div class="cap">Gross yield</div><div class="v">${c.yld.toFixed(1)}%</div></div><div><div class="cap">Before service charge</div><div class="v">${gbp(c.net)} <small>pcm</small></div></div></div></div>
+    <div class="stats"><div><div class="cap">Rent estimate</div><div class="v">${gbp(u.rent)} <small>pcm</small></div></div><div><div class="cap">Gross yield</div><div class="v">${c.yld.toFixed(1)}%</div></div><div><div class="cap">Net cash flow</div><div class="v">${gbp(c.net)} <small>pcm</small></div></div></div></div>
    <div class="sec"><div class="cap"><span>Next steps</span></div>
-    <div class="body"><p>Book a 30-minute video call with Charlie to go through the site and the plans. If ${u.name} is the one, ${gbp(PAY.total)} reserves it: ${gbp(PAY.deposit)} is credited against your purchase and ${gbp(PAY.admin)} is BRIK Studios' admin fee. You'll then pay 20% (${gbp(u.dep)}) on exchange, with the balance due on completion, expected mid 2027. The lease is 999 years with a peppercorn ground rent and an ABC+ build warranty.</p></div>
-    <div class="note"><b>Subject to availability.</b> You're seeing ${u.name} ahead of the wider launch, and it's offered subject to availability. The service charge is still being set and will be confirmed before you reserve. Images are computer-generated and indicative; floor plans are not to scale.</div></div>
+    <div class="body"><p>Book a 30-minute video call with Charlie to go through the site and the plans. If ${u.name} is the one, ${gbp(PAY.total)} reserves it: ${gbp(PAY.deposit)} is your reservation deposit and counts towards your 20%, and ${gbp(PAY.admin)} is BRIK Studios' admin fee. You'll then pay the rest of your 20% (${gbp(u.dep)} in total) on exchange, with the balance due on completion, expected mid 2027. The lease is 999 years with a peppercorn ground rent and an ABC+ build warranty.</p></div>
+    <div class="note"><b>Subject to availability.</b> You're seeing ${u.name} ahead of the wider launch, and it's offered subject to availability. The service charge is worked out at £2.24 per sq ft per year and shown monthly. Images are computer-generated and indicative; floor plans are not to scale.</div></div>
   </div></div>
   <div class="p-foot"><div class="who">${ONE?"":`<div class="bsub" style="margin:0">${idx} of ${U.length}</div>`}<div class="serif">${u.name}</div></div>${reactBtns(id)}${reqBtn(id)}</div>`;startAuto()}
 function openBuilding(){buildingPanel();openPanel($("#pBld"))}
