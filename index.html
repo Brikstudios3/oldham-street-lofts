@@ -2245,7 +2245,7 @@ const U=[
 const TAKE="Quality stock is scarce here, and the best product always lets first and lets for more.";
 const TAKE_LONG="We believe it will be one of the best developments ever delivered in Hyde, and that is exactly why we expect it to command rents at the top of the local market. Quality stock is scarce here, and the best product always lets first and lets for more.";
 const ONE=U.length===1;
-const SC_RATE=2.24; // £ per sq ft per year
+const SC_RATE=2.50; // £ per sq ft per year
 U.forEach(u=>{u.sc=u.area*SC_RATE/12;u.dep=u.price*.2;u.psf=u.price/u.area;u.num=u.name.replace(/\D/g,"");u.ref=(u.num||"OSL")+"-OSL"});
 const PAY={total:3500,deposit:3000,admin:500};
 const LTV=.75, RATE=.04, MGMT=.10, LEGAL_EX=1200, LEGAL_COMP=700;
@@ -2258,7 +2258,7 @@ const GALLERY=[{src:"var(--hero)",cap:"Corner of Church Street and Oldham Street
  {src:"var(--kitchen)",cap:"Living space, CGI"},{src:"var(--bed)",cap:"Bedroom, CGI"},{src:"var(--bath)",cap:"Shower room, CGI"},
  {src:"var(--fa18)",cap:"First floor, Plot 18 highlighted",plan:1},{src:"var(--fa24)",cap:"Second floor, Plot 24 highlighted",plan:1},
  {src:"var(--h_site)",cap:"On site, August 2026"}];
-const ESS=[["Lease","999 years"],["Ground rent","Peppercorn"],["Service charge","£2.24 per sq ft per year (about £88 pcm for Plots 18 and 24)"],["Build warranty","ABC+, accepted by most major lenders"],["Reservation","£3,000 reservation deposit, which counts towards your 20%, plus a £500 admin fee"],["Exchange","20% deposit"],["Completion","Expected mid 2027"],["Extras","A shared resident garden, guaranteed by planning in perpetuity, and a secure bike space for every apartment"],["Freehold","Passes to a management company owned by the apartment buyers"],["Developer","Ascot Hyde Ltd"],["Architect","Ollier Smurthwaite"],["Planning","24/00783/FUL, granted 23 April 2025"]];
+const ESS=[["Lease","999 years"],["Ground rent","Peppercorn"],["Service charge","£2.50 per sq ft per year, about £87 a month for an average one bed"],["Build warranty","ABC+, accepted by most major lenders"],["Reservation","£3,000 reservation deposit, which counts towards your 20%, plus a £500 admin fee"],["Exchange","20% deposit"],["Completion","Expected mid 2027"],["Extras","A shared resident garden, guaranteed by planning in perpetuity, and a secure bike space for every apartment"],["Freehold","Passes to a management company owned by the apartment buyers"],["Developer","Ascot Hyde Ltd"],["Architect","Ollier Smurthwaite"],["Planning","24/00783/FUL, granted 23 April 2025"]];
 const ROOMS=[
  {t:"Open plan living",img:"var(--kitchen)",l:["Open plan living and kitchen","Sage kitchen","Tall windows","Laminate floors","Its own KERS heat pump water heater"]},
  {t:"Bedroom",img:"var(--bed)",l:["Separate double bedroom","Carpeted","Its own window"]},
@@ -2412,7 +2412,7 @@ function returnsTab(){const u=defaultCalc(),c=calc(u),y=r=>(r*12/u.price*100).to
    <div class="rows big"><div><span>Rent estimate</span><span>${gbp(u.rent)}</span></div>
     <div><span>Mortgage, 75% at 4% interest only</span><span>−£${c.mort.toFixed(2)}</span></div>
     <div><span>Letting management, 10%</span><span>−${gbp(c.mg)}</span></div>
-    <div><span>Service charge, est., £2.24 per sq ft per year</span><span>−£${u.sc.toFixed(2)}</span></div>
+    <div><span>Service charge, est., £2.50 per sq ft per year</span><span>−£${u.sc.toFixed(2)}</span></div>
     <div><span>Ground rent</span><span>Peppercorn</span></div>
     <div class="tot hlrow"><span>Net monthly cash flow</span><span>£${c.net.toFixed(2)}</span></div></div>
    <p class="fine" style="margin-top:12px">There's no lift, lounge or gym in the building, which keeps the service charge lean.</p></section>
@@ -2478,7 +2478,7 @@ CH.overview=()=>`<section class="ch" id="overview">${chh("01","Investment overvi
   <div class="body"><p class="lead">When we checked the listings in October, the only one beds to rent in Hyde were two older first floor flats on Market Street and Market Place. Oldham Street Lofts will be brand new, with a resident garden and a secure bike space for every apartment.</p>
   <p class="muted" style="margin-top:14px">It's rare product for the town: character stock minutes from the market place and Hyde Central, for buyers and renters being priced out of Manchester's mill conversions.</p>
   </div></div>
-  <div class="esspanel"><svg class="solid" viewBox="222 128 334 170" aria-hidden="true"><path d="M222 298V140H520L556 176V298Z"/></svg><div class="cap">The essentials</div><div class="rows big">${[["Lease","999 years"],["Ground rent","Peppercorn"],["Service charge","£2.24 per sq ft per year"],["Build warranty","ABC+"],["Reservation","£3,000 + £500 admin fee"],["Exchange","20% deposit"],["Completion","Expected mid 2027"],["Extras","Resident garden, bike space per apartment"]].map(([a,b])=>`<div><span>${a}</span><span>${b}</span></div>`).join("")}</div></div></div>
+  <div class="esspanel"><svg class="solid" viewBox="222 128 334 170" aria-hidden="true"><path d="M222 298V140H520L556 176V298Z"/></svg><div class="cap">The essentials</div><div class="rows big">${[["Lease","999 years"],["Ground rent","Peppercorn"],["Service charge","£2.50 per sq ft per year, about £87 a month for an average one bed"],["Build warranty","ABC+"],["Reservation","£3,000 + £500 admin fee"],["Exchange","20% deposit"],["Completion","Expected mid 2027"],["Extras","Resident garden, bike space per apartment"]].map(([a,b])=>`<div><span>${a}</span><span>${b}</span></div>`).join("")}</div></div></div>
  <div class="duo w" style="margin-top:56px"><div><div class="cap" style="margin-bottom:14px">The commuter belt</div><h3 class="big-h">Manchester, at a fraction of city prices.</h3>
   <div class="body"><p class="lead">Hyde Central is a 9-minute walk from the site, and trains reach Manchester Piccadilly in about 18 to 22 minutes. Manchester city centre is 7.5 miles away, Stockport 5 and Glossop 6.</p>
   <p class="muted" style="margin-top:14px">Oldham Street Lofts is another strategic play for us in Manchester's commuter belt: finding value in the boroughs around the city centre, and backing schemes with the quality to lead their town.</p></div></div>
@@ -2680,7 +2680,7 @@ function unitPanel(id){const u=find(id),p=$("#pOff"),c=calc(u);p.dataset.id=id;p
     <div class="stats"><div><div class="cap">Rent estimate</div><div class="v">${gbp(u.rent)} <small>pcm</small></div></div><div><div class="cap">Gross yield</div><div class="v">${c.yld.toFixed(1)}%</div></div><div><div class="cap">Net cash flow</div><div class="v">${gbp(c.net)} <small>pcm</small></div></div></div></div>
    <div class="sec"><div class="cap"><span>Next steps</span></div>
     <div class="body"><p>Book a 30-minute video call with Charlie to go through the site and the plans. If ${u.name} is the one, ${gbp(PAY.total)} reserves it: ${gbp(PAY.deposit)} is your reservation deposit and counts towards your 20%, and ${gbp(PAY.admin)} is BRIK Studios' admin fee. You'll then pay the rest of your 20% (${gbp(u.dep)} in total) on exchange, with the balance due on completion, expected mid 2027. The lease is 999 years with a peppercorn ground rent and an ABC+ build warranty.</p></div>
-    <div class="note"><b>Subject to availability.</b> You're seeing ${u.name} ahead of the wider launch, and it's offered subject to availability. The service charge is worked out at £2.24 per sq ft per year and shown monthly. Images are computer-generated and indicative; floor plans are not to scale.</div></div>
+    <div class="note"><b>Subject to availability.</b> You're seeing ${u.name} ahead of the wider launch, and it's offered subject to availability. The service charge is worked out at £2.50 per sq ft per year and shown monthly. Images are computer-generated and indicative; floor plans are not to scale.</div></div>
   </div></div>
   <div class="p-foot"><div class="who">${ONE?"":`<div class="bsub" style="margin:0">${idx} of ${U.length}</div>`}<div class="serif">${u.name}</div></div>${reactBtns(id)}${reqBtn(id)}</div>`;startAuto()}
 function openBuilding(){buildingPanel();openPanel($("#pBld"))}
