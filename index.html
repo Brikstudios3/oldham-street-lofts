@@ -2127,6 +2127,7 @@ html.coverlock,html.coverlock body{overflow:hidden!important}
 .pic.planpic{background-size:230%!important;background-position:88% 86%!important}
 
 .pane.deco{overflow-x:clip}
+.sitemap{margin:40px 0 36px}.sitemap .smframe{position:relative;border:1px solid var(--ink);background:var(--paper);aspect-ratio:16/7;overflow:hidden}.sitemap iframe{position:absolute;inset:0;width:100%;height:100%;border:0;filter:grayscale(.35) contrast(1.03)}.sitemap figcaption{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap;margin-top:12px;font-size:13px;color:var(--muted)}.sitemap figcaption b{color:var(--ink);font-weight:600;margin-right:6px}.sitemap figcaption a{color:var(--ink);white-space:nowrap}@media (max-width:900px){.sitemap .smframe{aspect-ratio:4/3}}@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .sitemap iframe{filter:grayscale(.5) brightness(.88)}}:root[data-theme="dark"] .sitemap iframe{filter:grayscale(.5) brightness(.88)}
 </style>
 </head>
 <body class="rep">
@@ -2228,6 +2229,7 @@ const COMPLETION="mid 2027";
 const CAL="https://calendly.com/charlie-brik-studios/oldham-street-lofts-preview-video-call";
 const FILM="film/";
 const MAPS="https://www.google.com/maps/search/?api=1&query=Syddall%20Street%2C%20Hyde%20SK14%201LB";
+const MAPEMBED="https://www.google.com/maps?q=Syddall%20Street%2C%20Hyde%20SK14%201LB&z=16&output=embed";
 const PLAY='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>';
 /* One block per apartment you're recommending (one to three). */
 const U=[
@@ -2521,6 +2523,7 @@ CH.location=()=>`<section class="ch" id="location">${chh("04","Location","Betwee
  <div class="duo w"><button class="pic tall2" style="background-image:var(--main);aspect-ratio:4/3" data-img="main" data-cap="The Syddall Street frontage, CGI" aria-label="View the Syddall Street frontage"></button>
   <div><div class="cap" style="margin-bottom:14px">Getting about</div><h3 class="big-h">The high street and the station, both on foot.</h3><p class="lead">Church Street runs straight on to Market Street, the town's high street, where the nearest bus stops are. Hyde Central station is 0.4 miles away, about 9 minutes on foot.</p>
   <div class="row" style="margin-top:22px"><a class="b line" href="${MAPS}" target="_blank" rel="noopener">Open in Google Maps</a><a class="b line" href="${FILM}" target="_blank" rel="noopener">Watch the film</a></div></div></div>
+ <figure class="sitemap"><div class="smframe"><iframe title="Map showing Oldham Street Lofts, Syddall Street, Hyde SK14 1LB" src="${MAPEMBED}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe></div><figcaption><span><b>Oldham Street Lofts</b> Syddall Street, Hyde SK14 1LB. On the corner of Church Street and Oldham Street.</span><a href="${MAPS}" target="_blank" rel="noopener">Open in Google Maps</a></figcaption></figure>
  <div class="cols2 lists"><div><h3 class="lh">${IC.walk}On foot</h3><ul class="walk">${[["Market Street, the high street","close by",2,IC.shop],["Bus stops on Market Street","close by",2,IC.bus],["St George's Church","close by",2,IC.church],["Hyde Central station","9 min",9,IC.train]].map(([a,t,m,ic])=>`<li><i class="wi">${ic}</i><span class="wl">${a}</span><span class="wt">${IC.walk}<b>${t}</b></span><span class="wb" style="--w:${Math.max(5,Math.round(m/9*62))}"></span></li>`).join("")}</ul></div>
   <div><h3 class="lh">${IC.train}Further afield</h3><ul class="conn">${[["Manchester Piccadilly","18–22 min","by train from Hyde Central",IC.train],["Manchester city centre","7.5 miles","",IC.build],["Stockport","5 miles","",IC.build],["Glossop","6 miles","",IC.street]].map(([a,b,c,ic])=>`<li><i class="wi">${ic}</i><span class="wl">${a}</span><span class="ct"><b>${b}</b><small>${c}</small></span></li>`).join("")}</ul></div></div>
  <div class="sec"><div class="cap"><span>The streets around it</span></div><div class="duo w"><div><h3 class="big-h">Red brick terraces and old mills.</h3><p class="lead">The streets around Syddall Street are red brick terraces of two and three storeys, set close to the pavement, with a scatter of taller mill and warehouse buildings just to the south east: a reminder of what filled these streets a century ago.</p>
