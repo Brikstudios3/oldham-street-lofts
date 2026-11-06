@@ -2189,7 +2189,7 @@ html.coverlock,html.coverlock body{overflow:hidden!important}
   </section>
 
   <section id="hqTop" class="hqtop" aria-label="Private preview"></section>
-  <nav class="tabs gtabs" role="tablist" aria-label="Report sections"><div class="tg on" data-g="opportunity"><button class="tgl" data-group="opportunity">The opportunity</button><div class="tgb"><button role="tab" data-tab="overview" aria-selected="true"><span class="tn0">01</span>Overview</button><button role="tab" data-tab="building" aria-selected="false"><span class="tn0">02</span>The building</button><button role="tab" data-tab="heritage" aria-selected="false"><span class="tn0">03</span>Heritage</button></div></div><div class="tg" data-g="intel"><button class="tgl" data-group="intel">Location and intel</button><div class="tgb"><button role="tab" data-tab="location" aria-selected="false"><span class="tn0">04</span>Location</button><button role="tab" data-tab="hyde" aria-selected="false"><span class="tn0">05</span>Why Hyde</button><button role="tab" data-tab="data" aria-selected="false"><span class="tn0">06</span>The data</button></div></div><div class="tg" data-g="invest"><button class="tgl" data-group="invest">Your investment</button><div class="tgb"><button role="tab" data-tab="units" aria-selected="false"><span class="tn0">07</span>Recommended units</button><button role="tab" data-tab="returns" aria-selected="false"><span class="tn0">08</span>Returns</button><button role="tab" data-tab="next" aria-selected="false"><span class="tn0">09</span>Next steps</button></div></div></nav>
+  <nav class="tabs gtabs" role="tablist" aria-label="Report sections"><div class="tg on" data-g="opportunity"><button class="tgl" data-group="opportunity">The opportunity</button><div class="tgb"><button role="tab" data-tab="overview" aria-selected="true"><span class="tn0">01</span>Overview</button><button role="tab" data-tab="building" aria-selected="false"><span class="tn0">02</span>The building</button><button role="tab" data-tab="heritage" aria-selected="false"><span class="tn0">03</span>Heritage</button></div></div><div class="tg" data-g="intel"><button class="tgl" data-group="intel">Location and intel</button><div class="tgb"><button role="tab" data-tab="location" aria-selected="false"><span class="tn0">04</span>Location</button><button role="tab" data-tab="hyde" aria-selected="false"><span class="tn0">05</span>Why Hyde</button><button role="tab" data-tab="data" aria-selected="false"><span class="tn0">06</span>The data</button></div></div><div class="tg" data-g="invest"><button class="tgl" data-group="invest">Your investment</button><div class="tgb"><button role="tab" data-tab="units" aria-selected="false"><span class="tn0">07</span>Recommended units</button><button role="tab" data-tab="returns" aria-selected="false"><span class="tn0">08</span>Returns</button><button role="tab" data-tab="shortlets" aria-selected="false"><span class="tn0">09</span>Short lets</button><button role="tab" data-tab="next" aria-selected="false"><span class="tn0">10</span>Next steps</button></div></div></nav>
   <div id="view"></div>
 
   <section class="changes" id="chg"><span class="mask plogo lg7 chgmark" aria-hidden="true"></span>
@@ -2427,6 +2427,51 @@ function returnsTab(){const u=defaultCalc(),c=calc(u),y=r=>(r*12/u.price*100).to
    ${ladder()}</section>
   <p class="fine">Rents are BRIK Studios' estimates from live asking rents, not a formal rental valuation, and assume the apartment is let furnished. A lender's valuer will usually assess rent against unfurnished stock, so plan to borrow on a lower figure. Mortgage figures assume a 75% interest-only buy-to-let mortgage at 4%. *Stamp duty at today's higher rates for an additional property. Take your own financial, tax and legal advice.</p>
   <div class="ctaline"><span class="serif">Happy with the numbers?</span><button class="b solid" data-req="${u.id}">Book a video call</button></div></div>`}
+/* ============ SHORT LETS ============ */
+/* Same method as the Grove, Buxton appraisal (5 Nov 2026), rerun on Tameside short let data */
+const STR={stay:4,clean:50,mgmt:.15,plat:.16,cleanCost:45,cons:3.5,fixed:3750,
+ sc:{cautious:{occ:.45,adr:75,label:"Cautious",sub:"Close to the Tameside average"},
+     expected:{occ:.55,adr:85,label:"Expected",sub:"A new, well run loft"},
+     strong:{occ:.65,adr:90,label:"Strong",sub:"Top of the local market"}}};
+function strCalc(u,k){const c=STR.sc[k],n=365*c.occ,st=n/STR.stay,room=n*c.adr,fees=st*STR.clean,gross=room+fees,
+  mg=gross*STR.mgmt,plat=gross*STR.plat,cl=st*STR.cleanCost,cons=n*STR.cons,run=plat+cl+cons+STR.fixed,net=gross-mg-run;
+  return {n,st,room,fees,gross,mg,plat,cl,cons,run,net,gy:gross/u.price*100,ny:net/u.price*100}}
+function longNet(u){return u.rent*12*(1-MGMT)-u.sc*12}
+function strTab(){const u=defaultCalc(),k=S.str||"expected",r=strCalc(u,k),c=STR.sc[k],ln=longNet(u),mo=u.price*LTV*RATE,
+  pc=v=>v.toFixed(1)+"%",all=Object.keys(STR.sc).map(x=>[x,strCalc(u,x)]),mx=Math.max(ln,...all.map(a=>a[1].net))*1.08;
+  return `<div class="pane deco"><i class="mask patentbg" aria-hidden="true"></i><section class="sec first"><div class="cap"><span>Short let forecast</span><span>Managed, furnished</span></div>${uSwitch()}
+   <div class="availnote" role="note"><span class="alive"><i></i>Subject to the lease</span><p><b>Short letting is not allowed under the current draft lease.</b> It permits assured shorthold lets only. These figures show what a short let could earn if the final lease allows it. Please speak to us before you buy on that basis.</p></div>
+   <div class="seg2" role="group" aria-label="Choose a scenario" style="margin-top:22px">${Object.keys(STR.sc).map(x=>`<button data-str="${x}" aria-pressed="${x===k}">${STR.sc[x].label}</button>`).join("")}</div>
+   <div class="stats s4">
+    <div><div class="cap">Nightly rate</div><div class="v">${gbp(c.adr)} <small>a night</small></div></div>
+    <div><div class="cap">Occupancy</div><div class="v">${Math.round(c.occ*100)}% <small>${Math.round(r.n)} nights</small></div></div>
+    <div><div class="cap">Bookings a year</div><div class="v">${gbp(r.gross)}</div></div>
+    <div class="hl"><div class="cap">Net a year, before mortgage</div><div class="v">${gbp(r.net)} <small>${pc(r.ny)}</small></div></div></div></section>
+  <div class="cols2">
+  <section class="sec"><div class="cap"><span>A year of short lets</span><span>${c.label}</span></div>
+   <div class="rows big"><div><span>${Math.round(r.n)} nights at ${gbp(c.adr)}</span><span>${gbp(r.room)}</span></div>
+    <div><span>Cleaning fees paid by guests, ${gbp(STR.clean)} a stay</span><span>${gbp(r.fees)}</span></div>
+    <div class="tot"><span>Gross bookings, ${pc(r.gy)} gross yield</span><span>${gbp(r.gross)}</span></div>
+    <div><span>Management, 15%</span><span>−${gbp(r.mg)}</span></div>
+    <div><span>Platform fees and furniture reserve, 16%</span><span>−${gbp(r.plat)}</span></div>
+    <div><span>Cleaning, ${gbp(STR.cleanCost)} a stay, ${Math.round(r.st)} stays</span><span>−${gbp(r.cl)}</span></div>
+    <div><span>Linen and consumables, £3.50 a night</span><span>−${gbp(r.cons)}</span></div>
+    <div><span>Bills, insurance, repairs and service charge</span><span>−${gbp(STR.fixed)}</span></div>
+    <div class="tot hlrow"><span>Net a year, before mortgage</span><span>${gbp(r.net)}</span></div></div></section>
+  <section class="sec"><div class="cap"><span>Against a normal let</span><span>Net a year, before mortgage</span></div>
+   <div class="bars" role="img" aria-label="Net income a year: normal let ${gbp(ln)}, short lets ${all.map(([x,a])=>STR.sc[x].label+" "+gbp(a.net)).join(", ")}">
+    <div class="bar ph"><span class="bl">Normal let<small>${gbp(u.rent)} pcm, 10% management</small></span><span class="bt"><i style="--v:${(ln/mx*100).toFixed(1)}%"></i></span><b>${gbp(ln)}</b></div>
+    ${all.map(([x,a])=>`<div class="bar"><span class="bl">Short let, ${STR.sc[x].label.toLowerCase()}<small>${Math.round(STR.sc[x].occ*100)}% at ${gbp(STR.sc[x].adr)} a night</small></span><span class="bt"><i style="--v:${(a.net/mx*100).toFixed(1)}%"></i></span><b>${gbp(a.net)}</b></div>`).join("")}</div>
+   <div class="rows big" style="margin-top:22px"><div><span>Normal let, net yield</span><span>${pc(ln/u.price*100)}</span></div>
+    <div><span>Short let, ${c.label.toLowerCase()}, net yield</span><span>${pc(r.ny)}</span></div>
+    <div><span>Mortgage interest, 75% at 4%, for comparison</span><span>−${gbp(mo)}</span></div>
+    <div><span>Normal let, after the mortgage</span><span>${gbp(ln-mo)} a year</span></div>
+    <div class="tot hlrow"><span>Short let, after the mortgage</span><span>${gbp(r.net-mo)} a year</span></div></div></section></div>
+  <section class="sec"><div class="cap"><span>Reading it</span></div>
+   <div class="duo w"><div><h3>Short lets earn more in bookings, but cost more to run.</h3><p class="muted">Bookings come in at around ${pc(strCalc(u,"cautious").gy)} to ${pc(strCalc(u,"strong").gy)} gross, well above a normal let. Once management, platform fees, cleaning and bills come off, a short let only matches a normal let when it runs near the top of the local market. In Hyde the normal let is the steadier choice; short letting suits a hands on owner, or someone who wants the flat for their own stays now and then.</p></div>
+    <div class="growth g3">${all.map(([x,a])=>`<div class="gstat"><b>${pc(a.ny)}</b><span>${STR.sc[x].label}: net yield as a short let</span></div>`).join("")}</div></div></section>
+  <p class="fine">Short let figures are BRIK Studios' estimates, using the same method as our other appraisals. Tameside listings average £88 a night across all sizes at around 42% occupancy, with stays of about four and a half nights (AirROI, twelve months to October 2026). We assume four night stays, a guest cleaning fee of £50, 15% management, 16% for platform fees and a furniture reserve, £45 cleaning a stay, £3.50 a night for linen and consumables, and £3,750 a year for bills, insurance, repairs and the £2.50 per sq ft service charge. Furnishing the flat is extra. Holiday let mortgages usually cost more than the 4% shown. A short let may pay business rates instead of council tax. Short letting is subject to the final lease. Take your own financial, tax and legal advice.</p>
+  <div class="ctaline"><span class="serif">Want to talk it through?</span><button class="b solid" data-req="${u.id}">Book a video call</button></div></div>`}
 function galleryTab(){return `<div class="pane"><section class="sec first"><div class="cap"><span>Gallery</span><span>${GALLERY.length} images</span></div>
   <div class="gal">${GALLERY.map((g,i)=>`<button class="${g.plan?"plan":""}" style="background-image:${g.src}" data-gi="${i}" aria-label="View ${g.cap}"><span>${g.cap}</span></button>`).join("")}</div>
   <p class="fine">Images are computer-generated and indicative.</p></section></div>`}
@@ -2553,8 +2598,8 @@ const WA_="https://wa.me/447353164480?text=",WAI=`<svg viewBox="0 0 24 24" class
 
 
 /* ============ MASTER: investment report + unit selection ============ */
-const TABS={overview:"Investment overview",building:"The building",heritage:"Hyde's heritage",location:"Location",hyde:"Why Hyde",data:"The data",returns:"Returns",units:"Recommended units",next:"Next steps"};
-const NEXT={overview:["returns","Look at the numbers"],building:["heritage","Next: Hyde's heritage"],heritage:["location","Next: the location"],location:["hyde","Next: why Hyde"],hyde:["data","Next: the data"],data:["returns","Look at the numbers"],returns:["units","See the recommended apartments"],units:["next","Book a video call"]};
+const TABS={overview:"Investment overview",building:"The building",heritage:"Hyde's heritage",location:"Location",hyde:"Why Hyde",data:"The data",returns:"Returns",shortlets:"Short lets",units:"Recommended units",next:"Next steps"};
+const NEXT={overview:["returns","Look at the numbers"],building:["heritage","Next: Hyde's heritage"],heritage:["location","Next: the location"],location:["hyde","Next: why Hyde"],hyde:["data","Next: the data"],data:["returns","Look at the numbers"],returns:["shortlets","Next: short lets"],shortlets:["units","See the recommended apartments"],units:["next","Book a video call"]};
 function nextCta(id){const n=NEXT[id];if(!n)return"";return `<div class="nextcta"><div class="ncroof">${roofline()}</div><div class="nct"><span class="cap">Up next</span><b class="serif">${TABS[n[0]]}</b></div><button class="b solid" data-goto="${n[0]}">${n[1]} ${ARROW}</button></div>`}
 function howBlocks(){return `<section class="sec"><div class="cap"><span>How it works</span><span>What you're buying</span></div><div class="buy4">${[["key","You buy an apartment off-plan","Plot 18 or Plot 24, chosen with Charlie on a video call before they go on general release."],["doc","999-year lease, peppercorn ground rent","With an ABC+ build warranty. Completion is expected mid 2027."],["pen","Pay in stages","£3,000 to reserve plus a £500 admin fee, the rest of your 20% on exchange, then the balance on completion, usually with a 75% buy-to-let mortgage."],["flag","Hands off after","We find the tenant and manage the letting for 10% of the rent, which is already in the numbers in this report."]].map(([ic,t,d],i)=>`<div class="bt4 rise"><span class="n">${i+1}</span><i class="pi">${SI[ic]}</i><b>${t}</b><p>${d}</p></div>`).join("")}</div>
  <div class="handsoff"><i class="mask hoscout" aria-hidden="true"></i><div><div class="cap">After completion</div><h3 class="big-h" style="color:#fff">We take care of it all.</h3><p>Tenant find, referencing, rent collection and day-to-day management, for 10% of the rent. You don't need to live nearby or lift a finger.</p></div></div>
@@ -2566,13 +2611,14 @@ const WHY37=()=>`<section class="sec why37"><div class="cap"><span>Why these two
  <div class="row" style="margin-top:26px"><button class="b solid" data-call>Book a video call</button><a class="b line" href="${FILM}" target="_blank" rel="noopener">Watch the film</a></div></div>
  <div class="w37pics">${IMG("fa18","First floor, Plot 18 highlighted","pic tall2 planpic")}${IMG("garden","The walkway and resident garden, CGI","pic")}</div></div>
  <p class="fine">Images are computer-generated and indicative; floor plans are not to scale.</p></section>`;
-const GROUPS=[["opportunity","The opportunity",["overview","building","heritage"]],["intel","Location and intel",["location","hyde","data"]],["invest","Your investment",["units","returns","next"]]];
+const GROUPS=[["opportunity","The opportunity",["overview","building","heritage"]],["intel","Location and intel",["location","hyde","data"]],["invest","Your investment",["units","returns","shortlets","next"]]];
 const GNEXT={opportunity:["intel","Location and intel","Next: the location and intel"],intel:["invest","Your investment","See the recommended apartments"]};
 const groupOf=id=>GROUPS.find(g=>g[2].includes(id))||GROUPS[0];
 const T={overview:CH.overview,building:()=>CH.building().replace(/<\/section>$/,"")+galleryTab()+"</section>",heritage:CH.heritage,location:CH.location,hyde:CH.hyde,data:CH.data,
   returns:()=>chh("08","Returns","Worked through for "+defaultCalc().name+" at "+gbp(defaultCalc().price)+", with a 75% buy-to-let mortgage. Both corner lofts are the same size and price.")+returnsTab(),
   units:()=>chh("07","Recommended units","Plots 18 and 24, the two corner lofts, held back for this preview.")+EARLY+AVAIL+unitsTab()+WHY37(),
-  next:()=>chh("09","Next steps","How the video call works, what you pay and when, and how it runs hands off after completion.")+nextTab()+howBlocks()+CONTACT};
+  shortlets:()=>chh("09","Short lets","What "+defaultCalc().name+" could earn as a managed, furnished short let, set against a normal let.")+strTab(),
+  next:()=>chh("10","Next steps","How the video call works, what you pay and when, and how it runs hands off after completion.")+nextTab()+howBlocks()+CONTACT};
 const CONTACT=`<section class="sec"><div class="cap"><span>Keep in touch</span></div><div class="contact"><div class="pic" role="img" aria-label="Charlie Baxter"></div><div><h3 class="big-h" style="margin:0 0 14px">Have questions? I'll be glad to help.</h3>
  <ul class="cfacts"><li><b>Charlie Baxter</b><span>Co-founder and Sales Director, BRIK Studios and BRIK Capital</span></li><li><b>BSc (Hons) Investment and Financial Risk Management</b><span>Cass Business School, ranked 15th in Europe by the Financial Times (2017)</span></li><li><b>10 years in property</b><span>with a personal property portfolio in Stockport</span></li></ul>
  <div class="row"><button class="b solid" data-call>Book a video call</button><a class="b line" href="https://wa.me/447353164480?text=${encodeURIComponent("Hi Charlie, I've been looking at Oldham Street Lofts and have a question.")}" target="_blank" rel="noopener">WhatsApp me</a><a class="b line" href="tel:+447353164480">07353 164480</a><a class="b line" href="mailto:charlie@brik-studios.com">charlie@brik-studios.com</a></div></div></div></section>`;
@@ -2758,6 +2804,7 @@ document.addEventListener("click",e=>{
   if(d.tab){goTab(d.tab);return;S.tab=d.tab;renderMain();const nav=$(".tabs");const top=nav.getBoundingClientRect().top+scrollY-72;if(scrollY>top)scrollTo({top,behavior:"auto"});return}
   if(d.view){S.view=d.view;renderMain();return}
   if(d.calc){S.calcU=d.calc;renderMain();return}
+  if(d.str){S.str=d.str;renderMain();return}
   if(d.pstep!==undefined){S.payStep=+d.pstep;renderMain();return}
   if(d.pick){closeDlg();bookDlg(d.pick);return}
   if(d.goreturns){S.calcU=d.goreturns;S.tab="returns";while(stack.length)closeTop();goTab("returns");return}
